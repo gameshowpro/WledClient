@@ -1,0 +1,50 @@
+﻿<ResourceDictionary
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:conv="clr-namespace:GameshowPro.Common.Converters;assembly=GameshowPro.Common.Windows"
+             xmlns:comview="clr-namespace:GameshowPro.Common.View;assembly=GameshowPro.Common.Windows"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"  
+             mc:Ignorable="d">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/GameshowPro.Common.Windows;component/View/RemoteService.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Thickness x:Key="ControlMargin">10</Thickness>
+    <Thickness x:Key="ControlSmallMargin">5</Thickness>
+    <conv:ToOneBasedConverter x:Key="ToOneBased"/>
+    <conv:TimeSpanToSecondsConverter x:Key="TimeSpanToSecondsConverter"/>
+    <DataTemplate x:Key="Wled.SettingsEdit">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Status"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Host"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Mdns"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="InstanceName"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource ServiceStatus}" VerticalAlignment="Center" DockPanel.Dock="Left" Grid.Column="0" />
+            <TextBox VerticalAlignment="Center" Margin="{StaticResource ControlSmallMargin}" controls:TextBoxHelper.Watermark="Pixture host" Text="{Binding Settings.Host}" Grid.Column="1"/>
+            <ContentControl Content="{Binding ServicesMonitor}" ContentTemplate="{StaticResource IMdnsMatchedServicesMonitor.Search}" Grid.Column="2" />
+            <TextBox VerticalAlignment="Center" Text="{Binding Settings.Name}" controls:TextBoxHelper.Watermark="Instance name" Grid.Column="3"  />
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="Wled.Monitor">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Status" Width="Auto"/>
+                <ColumnDefinition SharedSizeGroup="Name" Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource ServiceStatus}" VerticalAlignment="Center" Grid.Column="0" />
+            <DockPanel DockPanel.Dock="Left" Margin="{StaticResource ControlSmallMargin}" Grid.Column="1" >
+                <TextBlock FontSize="{DynamicResource MahApps.Font.Size.FloatingWatermark}" Opacity="0.6" DockPanel.Dock="Top">
+                    <Run Text="Wled" />
+                    <Run Text="{Binding Settings.Name, Mode=OneWay}" />
+                </TextBlock>
+                <TextBlock Text="{Binding Settings.Host}" DockPanel.Dock="Top"  />
+            </DockPanel>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

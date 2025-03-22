@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+	<UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="$(GP_COMMON)GameshowPro.Common.Windows\GameshowPro.Common.Windows.csproj" />
+	<ProjectReference Include="$(GP_COMMON)GameshowPro.Common\GameshowPro.Common.csproj" />
+	  <ProjectReference Include="$(GP_MDNS)GameshowPro.Mdns\GameshowPro.Mdns.csproj" />
+    <ProjectReference Include="..\..\..\..\Public\WLED-SDK\WLED-SDK.Client.WebSocket\WLED-SDK.Client.WebSocket.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\Templates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

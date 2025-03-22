@@ -1,0 +1,15 @@
+﻿global using System;
+global using System.Linq;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using System.ComponentModel;
+global using System.Runtime.Serialization;
+global using System.Collections.ObjectModel;
+global using System.Collections.Generic;
+global using System.Collections.Immutable;
+global using System.Collections.Specialized;
+global using Microsoft.Extensions.Logging;
+global using WLED_SDK.Client.WebSocket;
+global using GameshowPro.Common.Model;
+global using GameshowPro.Mdns;
+global using static GameshowPro.Wled.Constants;
