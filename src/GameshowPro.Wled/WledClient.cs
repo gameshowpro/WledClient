@@ -6,7 +6,6 @@ namespace GameshowPro.Wled;
 
 public class WledClient : ObservableClass, IRemoteService
 {
-    public event EventHandler<StateChangedEventArgs>? OnStateChanged;
     private record ConnectionRecord(WledWebsocketClient Connection, string Host);
 
     private readonly PropertyChangeFilters _changeFilters = new(nameof(WledClient));
