@@ -1,6 +1,6 @@
 ﻿namespace GameshowPro.Wled;
 
-public class WledClients(IEnumerable<Settings> settings, IMdnsServiceFinder? serviceFinder, ILoggerFactory loggerFactory, CancellationToken cancellationToken) : NotifyingClass, IRemoteServiceCollection
+public class WledClients(IEnumerable<Settings> settings, IMdnsServiceFinder? serviceFinder, ILoggerFactory loggerFactory, CancellationToken cancellationToken) : ObservableClass, IRemoteServiceCollection
 {
     public ObservableCollection<WledClient> Items { get; } = [.. settings.Select((s, i) => new WledClient(s, serviceFinder, loggerFactory, cancellationToken))];
 

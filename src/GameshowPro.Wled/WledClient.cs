@@ -1,4 +1,6 @@
-﻿using WLED_SDK.Core.Models.WledInfo;
+﻿using System.Collections.Concurrent;
+using GameshowPro.Common;
+using WLED_SDK.Core.Models.WledInfo;
 using WLED_SDK.Core.Models.WledState;
 using WLED_SDK.Core.WledEventArgs;
 
@@ -12,9 +14,10 @@ public class WledClient : ObservableClass, IRemoteService
     private readonly ILogger _logger;
     private readonly ILogger<WledWebsocketClient> _clientLogger;
     private readonly AutoResetEvent _reconnect = new(false);
+    private readonly AutoResetEvent _loadPreset = new(false);
     private readonly WaitHandle _cancelling;
     private readonly CancellationToken _cancellationToken;
-
+    private readonly ConcurrentQueue<int> _loadPresetRequestQueue = [];
 
     public WledClient(Settings settings, IMdnsServiceFinder? serviceFinder, ILoggerFactory loggerFactory, CancellationToken cancellationToken)
     {
@@ -34,8 +37,9 @@ public class WledClient : ObservableClass, IRemoteService
         _logger = loggerFactory.CreateLogger($"{nameof(WledClient)}/{settings.Name}");
         _clientLogger = loggerFactory.CreateLogger<WledWebsocketClient>();
         Name = settings.Name;
-        _cancellationToken = cancellationToken; 
-        _cancelling = cancellationToken.WaitHandle; _changeFilters.AddFilter((s, e) => _reconnect.Set(), new PropertyChangeCondition(Settings, nameof(Settings.Host)));
+        _cancellationToken = cancellationToken;
+        _cancelling = cancellationToken.WaitHandle;
+        _changeFilters.AddFilter((s, e) => _reconnect.Set(), new PropertyChangeCondition(Settings, nameof(Settings.Host)));
         ServiceState = new(RemoteServiceName);
         _ = Task.Run(UpdateLoop, cancellationToken);
     }
@@ -49,7 +53,7 @@ public class WledClient : ObservableClass, IRemoteService
 
     private async Task UpdateLoop()
     {
-        WaitHandle[] waitHandles = [ _cancelling, _reconnect ];
+        WaitHandle[] waitHandles = [_cancelling, _reconnect, _loadPreset];
         int handle;
         WledWebsocketClient? client = null;
         try
@@ -92,8 +96,31 @@ public class WledClient : ObservableClass, IRemoteService
                         }
                         ServiceState.SetAll(new(RemoteServiceStates.Connected, "Connected", 1));
                         break;
+                    case 2:
+                        //_loadPreset requested
+                        while (client != null && _loadPresetRequestQueue.Count > 0)
+                        {
+                            List<int> presets = [];
+                            while (_loadPresetRequestQueue.TryDequeue(out int preset))
+                            {
+                                presets.Add(preset);
+                            }
+                            
+                            // Process to keep only the last occurrence of each preset
+                            Dictionary<int, int> lastOccurrence = [];
+                            for (int i = 0; i < presets.Count; i++)
+                            {
+                                lastOccurrence[presets[i]] = i;
+                            }
+                            
+                            // Apply presets in original order, but only the last occurrence of each
+                            foreach (KeyValuePair<int, int> pair in lastOccurrence.OrderBy(x => x.Value))
+                            {
+                                await client.SendJsonAsync(new { ps = pair.Key });
+                            }
+                        }
+                        break;
                 }
-                
             }
         }
         catch (OperationCanceledException)
@@ -158,5 +185,13 @@ public class WledClient : ObservableClass, IRemoteService
         private set => _ = SetProperty(ref _wledInfo, value);
     }
 
-
+    public async Task SetPreset(int preset)
+    {
+        if (!preset.IsInRange(-1, 250, true))
+        {
+            throw new ArgumentOutOfRangeException(nameof(preset), "Preset must be between -1 and 250.");
+        }
+        _loadPresetRequestQueue.Enqueue(preset);
+        _loadPreset.Set();
+    }
 }
