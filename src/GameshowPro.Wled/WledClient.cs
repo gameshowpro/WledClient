@@ -185,7 +185,7 @@ public class WledClient : ObservableClass, IRemoteService
         private set => _ = SetProperty(ref _wledInfo, value);
     }
 
-    public async Task SetPreset(int preset)
+    public void SetPreset(int preset)
     {
         if (!preset.IsInRange(-1, 250, true))
         {
