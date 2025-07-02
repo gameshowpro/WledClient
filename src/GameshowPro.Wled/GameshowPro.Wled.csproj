@@ -1,20 +1,71 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
-	<UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
+    <Authors>Hamish Barjonas</Authors>
+    <Product>GameshowPro Wled wrapper</Product>
+    <Description>A wrapper around a WLED-SDK to allow easy and consistent implementation within GameShowPro applications.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>© 2025 Barjonas LLC</Copyright>
+    <Configurations>Debug;Release;ReleaseWindows;DebugWindows</Configurations>
+    <IncludeSymbols>True</IncludeSymbols>
   </PropertyGroup>
-
   <ItemGroup>
-	<ProjectReference Include="$(GP_COMMON)GameshowPro.Common.Windows\GameshowPro.Common.Windows.csproj" />
-	<ProjectReference Include="$(GP_COMMON)GameshowPro.Common\GameshowPro.Common.csproj" />
-	  <ProjectReference Include="$(GP_MDNS)GameshowPro.Mdns\GameshowPro.Mdns.csproj" />
-    <ProjectReference Include="..\..\..\..\Public\WLED-SDK\WLED-SDK.Client.WebSocket\WLED-SDK.Client.WebSocket.csproj" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="WLED-SDK.Client.WebSocket" Version="1.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Websocket.Client" Version="5.0.0" />
   </ItemGroup>
+  <Choose>
+    <When Condition="'$(Configuration)' == 'DebugWindows' OR '$(Configuration)' == 'ReleaseWindows'">
+      <PropertyGroup>
+        <TargetFrameworks>net9.0-windows</TargetFrameworks>
+        <UseWPF>true</UseWPF>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
+        <DefineConstants>$(DefineConstants);WPF</DefineConstants>
+        <PackageId>GameshowPro.Wled.Windows</PackageId>
+      </PropertyGroup>
 
-  <ItemGroup>
-    <Page Update="View\Templates.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+      <Choose>
+        <When Condition="Exists('$(GP_COMMON)')">
+          <ItemGroup>
+          <ProjectReference Include="$(GP_COMMON)GameshowPro.Common\GameshowPro.Common.csproj" />
+            <ProjectReference Include="$(GP_MDNS)GameshowPro.Mdns\GameshowPro.Mdns.csproj" />
+          </ItemGroup>
+        </When>
+        <Otherwise>
+          <ItemGroup>
+            <PackageReference Include="GameshowPro.Common.Windows" Version="1.1.50" />
+            <PackageReference Include="GameshowPro.Mdns.Windows" Version="1.0.12" />
+          </ItemGroup>
+        </Otherwise>
+      </Choose>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <TargetFrameworks>net9.0</TargetFrameworks>
+        <PackageId>GameshowPro.Wled</PackageId>
+      </PropertyGroup>
+      <ItemGroup>
+        <None Include="**\*.xaml" />
+        <Compile Remove="**\*.xaml.cs" />
+      </ItemGroup>
+      <Choose>
+        <When Condition="Exists('$(GP_COMMON)')">
+          <ItemGroup>
+            <ProjectReference Include="$(GP_COMMON)GameshowPro.Common\GameshowPro.Common.csproj" />
+            <ProjectReference Include="$(GP_MDNS)GameshowPro.Mdns\GameshowPro.Mdns.csproj" />
+          </ItemGroup>
+        </When>
+        <Otherwise>
+          <ItemGroup>
+            <PackageReference Include="GameshowPro.Common" Version="1.1.50" />
+            <PackageReference Include="GameshowPro.Mdns" Version="1.0.12" />
+          </ItemGroup>
+        </Otherwise>
+      </Choose>
+    </Otherwise>
+  </Choose>
 </Project>
