@@ -5,7 +5,7 @@
     <Product>GameshowPro Wled wrapper</Product>
     <Description>A wrapper around a WLED-SDK to allow easy and consistent implementation within GameShowPro applications.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Copyright>© 2025 Barjonas LLC</Copyright>
+    <Copyright>Barjonas LLC 2026</Copyright>
     <Configurations>Debug;Release;ReleaseWindows;DebugWindows</Configurations>
     <IncludeSymbols>True</IncludeSymbols>
   </PropertyGroup>
@@ -38,7 +38,7 @@
         <Otherwise>
           <ItemGroup>
             <PackageReference Include="GameshowPro.Common.Windows" Version="1.1.50" />
-            <PackageReference Include="GameshowPro.Mdns.Windows" Version="1.0.12" />
+            <PackageReference Include="GameshowPro.Mdns.Windows" Version="1.0.17" />
           </ItemGroup>
         </Otherwise>
       </Choose>
@@ -61,8 +61,8 @@
         </When>
         <Otherwise>
           <ItemGroup>
-            <PackageReference Include="GameshowPro.Common" Version="1.1.50" />
-            <PackageReference Include="GameshowPro.Mdns" Version="1.0.12" />
+            <PackageReference Include="GameshowPro.Common" Version="1.1.73" />
+            <PackageReference Include="GameshowPro.Mdns" Version="1.0.17" />
           </ItemGroup>
         </Otherwise>
       </Choose>
