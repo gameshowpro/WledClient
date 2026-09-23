@@ -10,18 +10,18 @@
     <IncludeSymbols>True</IncludeSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="WLED-SDK.Client.WebSocket" Version="1.0.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Websocket.Client" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Websocket.Client" Version="5.5.0" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(Configuration)' == 'DebugWindows' OR '$(Configuration)' == 'ReleaseWindows'">
       <PropertyGroup>
-        <TargetFrameworks>net9.0-windows</TargetFrameworks>
+        <TargetFrameworks>net10.0-windows</TargetFrameworks>
         <UseWPF>true</UseWPF>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
         <DefineConstants>$(DefineConstants);WPF</DefineConstants>
@@ -37,15 +37,14 @@
         </When>
         <Otherwise>
           <ItemGroup>
-            <PackageReference Include="GameshowPro.Common.Windows" Version="1.1.50" />
-            <PackageReference Include="GameshowPro.Mdns.Windows" Version="1.0.17" />
+            <PackageReference Include="GameshowPro.Mdns.Windows" Version="1.0.20" />
           </ItemGroup>
         </Otherwise>
       </Choose>
     </When>
     <Otherwise>
       <PropertyGroup>
-        <TargetFrameworks>net9.0</TargetFrameworks>
+        <TargetFrameworks>net10.0</TargetFrameworks>
         <PackageId>GameshowPro.Wled</PackageId>
       </PropertyGroup>
       <ItemGroup>
@@ -61,8 +60,7 @@
         </When>
         <Otherwise>
           <ItemGroup>
-            <PackageReference Include="GameshowPro.Common" Version="1.1.73" />
-            <PackageReference Include="GameshowPro.Mdns" Version="1.0.17" />
+            <PackageReference Include="GameshowPro.Mdns" Version="1.0.20" />
           </ItemGroup>
         </Otherwise>
       </Choose>
