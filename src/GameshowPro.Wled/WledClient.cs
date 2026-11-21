@@ -39,7 +39,11 @@ public class WledClient : ObservableClass, IRemoteService
         Name = settings.Name;
         _cancellationToken = cancellationToken;
         _cancelling = cancellationToken.WaitHandle;
-        _changeFilters.AddFilter((s, e) => _reconnect.Set(), new PropertyChangeCondition(Settings, nameof(Settings.Host)));
+        _changeFilters.AddFilter((s, e) =>
+        {
+            NotifyPropertyChanged(nameof(IsConfigured));
+            _ = _reconnect.Set();
+        }, new PropertyChangeCondition(Settings, nameof(Settings.Host)));
         ServiceState = new(RemoteServiceName);
         _ = Task.Run(UpdateLoop, cancellationToken);
     }
@@ -48,6 +52,9 @@ public class WledClient : ObservableClass, IRemoteService
     IRemoteServiceSettings? IRemoteService.RemoteServiceSettings => Settings?.RemoteServiceSettings;
 
     public IMdnsMatchedServicesMonitor? ServicesMonitor { get; }
+
+    /// <summary>False when no host is set, so the monitoring UI omits this service.</summary>
+    public bool IsConfigured => !string.IsNullOrWhiteSpace(Settings?.Host);
 
     public string Name { get; }
 

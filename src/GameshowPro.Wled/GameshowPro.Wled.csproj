@@ -3,7 +3,7 @@
     <Nullable>enable</Nullable>
     <Authors>Hamish Barjonas</Authors>
     <Product>GameshowPro Wled wrapper</Product>
-    <Description>A wrapper around a WLED-SDK to allow easy and consistent implementation within GameShowPro applications.</Description>
+    <Description>A wrapper around a WLED-SDK to allow easy and consistent implementation within GameshowPro applications.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>Barjonas LLC 2026</Copyright>
     <Configurations>Debug;Release;ReleaseWindows;DebugWindows</Configurations>
@@ -16,12 +16,12 @@
     </PackageReference>
     <PackageReference Include="WLED-SDK.Client.WebSocket" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Websocket.Client" Version="5.5.0" />
+    <PackageReference Include="Websocket.Client" Version="5.5.1" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(Configuration)' == 'DebugWindows' OR '$(Configuration)' == 'ReleaseWindows'">
       <PropertyGroup>
-        <TargetFrameworks>net10.0-windows</TargetFrameworks>
+        <TargetFrameworks>net11.0-windows</TargetFrameworks>
         <UseWPF>true</UseWPF>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
         <DefineConstants>$(DefineConstants);WPF</DefineConstants>
@@ -37,14 +37,15 @@
         </When>
         <Otherwise>
           <ItemGroup>
-            <PackageReference Include="GameshowPro.Mdns.Windows" Version="1.0.20" />
+            <PackageReference Include="GameshowPro.Common.Windows" Version="1.4.32" />
+            <PackageReference Include="GameshowPro.Mdns.Windows" Version="1.0.25" />
           </ItemGroup>
         </Otherwise>
       </Choose>
     </When>
     <Otherwise>
       <PropertyGroup>
-        <TargetFrameworks>net10.0</TargetFrameworks>
+        <TargetFrameworks>net11.0</TargetFrameworks>
         <PackageId>GameshowPro.Wled</PackageId>
       </PropertyGroup>
       <ItemGroup>
@@ -60,7 +61,8 @@
         </When>
         <Otherwise>
           <ItemGroup>
-            <PackageReference Include="GameshowPro.Mdns" Version="1.0.20" />
+            <PackageReference Include="GameshowPro.Common" Version="1.4.32" />
+            <PackageReference Include="GameshowPro.Mdns" Version="1.0.25" />
           </ItemGroup>
         </Otherwise>
       </Choose>
